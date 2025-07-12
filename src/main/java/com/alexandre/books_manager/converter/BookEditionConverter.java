@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Component
 public class BookEditionConverter {
@@ -50,8 +51,8 @@ public class BookEditionConverter {
      * @param editions The list of entities.
      * @return A list of DTOs.
      */
-    public List<BookEditionDTO> toDtoList(List<BookEdition> editions) {
-        return editions.stream()
+    public List<BookEditionDTO> toDtoList(Iterable<BookEdition> editions) {
+        return StreamSupport.stream(editions.spliterator(), false)
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
