@@ -31,8 +31,8 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO bookDTO) {
-        Book savedBook = bookService.save(bookConverter.toEntity(bookDTO));
-        BookDTO savedBookDTO = bookConverter.toDto(savedBook);
+        Book book = bookService.save(bookConverter.toEntity(bookDTO));
+        BookDTO savedBookDTO = bookConverter.toDto(book);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
