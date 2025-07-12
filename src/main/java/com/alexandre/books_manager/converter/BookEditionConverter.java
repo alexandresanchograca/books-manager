@@ -16,17 +16,15 @@ public class BookEditionConverter {
         }
 
         return new BookEditionDTO(
-                edition.getId(),
+                edition.getIsbn(),
                 edition.getTitle(),
                 edition.getAuthorName(),
-                edition.getIsbn(),
                 edition.getNumber()
         );
     }
 
     /**
      * Converts an EditionCreateDTO into a new BookEdition entity.
-     * This new entity is not yet saved to the database (it has no ID).
      *
      * @param bookEditionDTO The DTO with the creation data.
      * @return A new BookEdition entity instance.

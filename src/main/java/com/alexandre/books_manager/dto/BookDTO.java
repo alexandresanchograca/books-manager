@@ -1,7 +1,6 @@
 package com.alexandre.books_manager.dto;
 
-public record BookBatchDTO(
-        Long id,
+public record BookDTO(
         String publisher,
         Integer publishedYear,
         String batchNumber,

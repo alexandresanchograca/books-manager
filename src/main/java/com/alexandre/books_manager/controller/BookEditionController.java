@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/v1/book-edition")
+@RequestMapping(path = "/api/v1/book-editions")
 public class BookEditionController {
 
     private BookEditionService bookEditionService;
@@ -27,9 +27,9 @@ public class BookEditionController {
         this.bookEditionConverter = bookEditionConverter;
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping
     public @ResponseBody Iterable<BookEditionDTO> findAllBookEditions() {
-        Iterable<BookEdition> bookBatchList = bookEditionService.findAll();
-        return bookEditionConverter.toDtoList(bookBatchList);
+        Iterable<BookEdition> bookEditionList = bookEditionService.findAll();
+        return bookEditionConverter.toDtoList(bookEditionList);
     }
 }

@@ -1,13 +1,15 @@
 package com.alexandre.books_manager.model;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
+@Table(name = "book_editions")
 public class BookEdition {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    @Column(nullable = false, unique = true, updatable = false)
+    private String isbn;
 
     @Column(nullable = false)
     private String title;
@@ -15,21 +17,10 @@ public class BookEdition {
     @Column(nullable = false)
     private String authorName;
 
-    @Column(unique = true, nullable = false)
-    private String isbn;
-
     private Integer number;
 
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BookBatch> books;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private List<Book> books;
 
     public String getTitle() {
         return title;

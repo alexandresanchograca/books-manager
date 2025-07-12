@@ -3,7 +3,11 @@ package com.alexandre.books_manager.model;
 import jakarta.persistence.*;
 
 @Entity
-public class BookBatch {
+@Table(
+        name = "books",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"batchNumber", "edition_isbn"})
+)
+public class Book {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -17,7 +21,7 @@ public class BookBatch {
     private String batchNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "edition_id", nullable = false)
+    @JoinColumn(name = "edition_isbn", nullable = false) // Reference the ISBN (VARCHAR)
     private BookEdition edition;
 
     public Long getId() {

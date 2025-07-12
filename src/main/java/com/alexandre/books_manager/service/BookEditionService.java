@@ -1,6 +1,5 @@
 package com.alexandre.books_manager.service;
 
-import com.alexandre.books_manager.model.BookBatch;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.repository.BookEditionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
