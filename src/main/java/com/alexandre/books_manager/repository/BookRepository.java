@@ -1,7 +1,6 @@
 package com.alexandre.books_manager.repository;
 
 import com.alexandre.books_manager.model.Book;
-import com.alexandre.books_manager.model.BookEdition;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

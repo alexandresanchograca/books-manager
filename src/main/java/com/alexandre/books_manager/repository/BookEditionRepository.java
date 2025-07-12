@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BookEditionRepository extends CrudRepository<BookEdition, Long> {
+public interface BookEditionRepository extends CrudRepository<BookEdition, String> {
     Optional<BookEdition> findByIsbn(String isbn);
 }

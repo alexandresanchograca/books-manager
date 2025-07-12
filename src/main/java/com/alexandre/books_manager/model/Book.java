@@ -21,7 +21,7 @@ public class Book {
     private String batchNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "edition_isbn", nullable = false) // Reference the ISBN (VARCHAR)
+    @JoinColumn(name = "edition_isbn", nullable = false)
     private BookEdition edition;
 
     public Long getId() {
