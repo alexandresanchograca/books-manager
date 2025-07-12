@@ -1,7 +1,9 @@
 package com.alexandre.books_manager.controller;
 
 import com.alexandre.books_manager.converter.DefectEditionConverter;
+import com.alexandre.books_manager.converter.DefectEditionCreateConverter;
 import com.alexandre.books_manager.dto.DefectEditionCreateDTO;
+import com.alexandre.books_manager.dto.DefectEditionDTO;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.model.DefectEdition;
 import com.alexandre.books_manager.service.BookEditionService;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequestMapping(path = "/api/v1/book-defects")
 public class DefectEditionController {
     private DefectEditionService defectEditionService;
+    private DefectEditionCreateConverter defectEditionCreateConverter;
     private DefectEditionConverter defectEditionConverter;
     private BookEditionService bookEditionService;
 
@@ -26,8 +29,8 @@ public class DefectEditionController {
     }
 
     @Autowired
-    public void setDefectEditionConverter(DefectEditionConverter defectEditionConverter) {
-        this.defectEditionConverter = defectEditionConverter;
+    public void setDefectEditionCreateConverter(DefectEditionCreateConverter defectEditionCreateConverter) {
+        this.defectEditionCreateConverter = defectEditionCreateConverter;
     }
 
     @Autowired
@@ -35,15 +38,20 @@ public class DefectEditionController {
         this.bookEditionService = bookEditionService;
     }
 
+    @Autowired
+    public void setDefectEditionConverter(DefectEditionConverter defectEditionConverter) {
+        this.defectEditionConverter = defectEditionConverter;
+    }
+
     @GetMapping
-    public ResponseEntity<List<DefectEditionCreateDTO>> findAll() {
+    public ResponseEntity<List<DefectEditionDTO>> findAll() {
         Iterable<DefectEdition> defectEditions = defectEditionService.findAll();
         return ResponseEntity.ok(defectEditionConverter.toDtoList(defectEditions));
     }
 
     @PostMapping
-    public ResponseEntity<DefectEditionCreateDTO> addDefect(@RequestBody DefectEditionCreateDTO defectEditionDTO) {
-        DefectEdition defectEdition = defectEditionConverter.toEntity(defectEditionDTO);
+    public ResponseEntity<DefectEditionDTO> addDefect(@RequestBody DefectEditionCreateDTO defectEditionDTO) {
+        DefectEdition defectEdition = defectEditionCreateConverter.toEntity(defectEditionDTO);
         Optional<BookEdition> relativeEdition = bookEditionService.findByIsbn(defectEditionDTO.editionIsbn());
 
         if(relativeEdition.isEmpty()) {
@@ -53,7 +61,7 @@ public class DefectEditionController {
         defectEdition.setEdition(relativeEdition.get());
 
         DefectEdition savedDefectEdition = defectEditionService.save(defectEdition);
-        DefectEditionCreateDTO savedDefectEditionDTO = defectEditionConverter.toDto(savedDefectEdition);
+        DefectEditionDTO savedDefectEditionDTO = defectEditionConverter.toDto(savedDefectEdition);
         return ResponseEntity.ok(savedDefectEditionDTO);
     }
 }

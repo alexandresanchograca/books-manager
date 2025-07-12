@@ -2,6 +2,7 @@ package com.alexandre.books_manager.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,8 +15,11 @@ public class DefectEdition {
     @JoinColumn(name = "edition_isbn", nullable = false)
     private BookEdition edition;
 
-    @OneToMany(mappedBy = "affectedBatch")
-    private List<Defect> affectedBatches;
+    @ElementCollection
+    @CollectionTable(name = "affected_batches",
+            joinColumns = @JoinColumn(name = "defect_code"))
+    @Column(name = "batch_number")
+    private List<String> affectedBatches = new ArrayList<>();
 
     public String getDefectCode() {
         return defectCode;
@@ -25,11 +29,11 @@ public class DefectEdition {
         this.defectCode = defectCode;
     }
 
-    public List<Defect> getAffectedBatches() {
+    public List<String> getAffectedBatches() {
         return affectedBatches;
     }
 
-    public void setAffectedBatches(List<Defect> affectedBatches) {
+    public void setAffectedBatches(List<String> affectedBatches) {
         this.affectedBatches = affectedBatches;
     }
 

@@ -1,7 +1,6 @@
 package com.alexandre.books_manager.converter;
 
-import com.alexandre.books_manager.dto.DefectEditionDTO;
-import com.alexandre.books_manager.model.BookEdition;
+import com.alexandre.books_manager.dto.DefectEditionCreateDTO;
 import com.alexandre.books_manager.model.DefectEdition;
 import org.springframework.stereotype.Component;
 
@@ -10,28 +9,20 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
-public class DefectEditionConverter {
-    private final BookEditionConverter bookEditionConverter;
-
-    public DefectEditionConverter(BookEditionConverter bookEditionConverter) {
-        this.bookEditionConverter = bookEditionConverter;
-    }
-
-    public DefectEditionDTO toDto(DefectEdition defectEdition) {
+public class DefectEditionCreateConverter {
+    public DefectEditionCreateDTO toDto(DefectEdition defectEdition) {
         if (defectEdition == null || defectEdition.getEdition() == null) {
             return null;
         }
 
-        BookEdition bookEdition = defectEdition.getEdition();
-
-        return new DefectEditionDTO(
-                bookEditionConverter.toDto(bookEdition),
+        return new DefectEditionCreateDTO(
                 defectEdition.getDefectCode(),
+                defectEdition.getEdition().getIsbn(),
                 defectEdition.getAffectedBatches()
         );
     }
 
-    public DefectEdition toEntity(DefectEditionDTO defectEditionDto) {
+    public DefectEdition toEntity(DefectEditionCreateDTO defectEditionDto) {
         if (defectEditionDto == null) {
             return null;
         }
@@ -43,7 +34,7 @@ public class DefectEditionConverter {
         return defectEdition;
     }
 
-    public List<DefectEditionDTO> toDtoList(Iterable<DefectEdition> defectEditions) {
+    public List<DefectEditionCreateDTO> toDtoList(Iterable<DefectEdition> defectEditions) {
         return StreamSupport.stream(defectEditions.spliterator(), false)
                 .map(this::toDto)
                 .collect(Collectors.toList());
