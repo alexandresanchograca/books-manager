@@ -10,8 +10,6 @@ info:
 servers:
   - url: http://localhost:8080
     description: Development server
-  - url: https://api.booksmanager.com
-    description: Production server
 
 tags:
   - name: Book Management
