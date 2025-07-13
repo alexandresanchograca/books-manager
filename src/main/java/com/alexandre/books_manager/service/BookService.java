@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class BookService {
+public class BookService implements GenericService<Book> {
     private BookRepository bookRepository;
     private BookEditionRepository bookEditionRepository;
 

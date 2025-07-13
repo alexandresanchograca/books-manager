@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class DefectEditionService {
+public class DefectEditionService implements GenericService<DefectEdition> {
     private BookRepository bookRepository;
     private DefectEditionRepository defectEditionRepository;
 
