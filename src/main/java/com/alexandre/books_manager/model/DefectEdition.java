@@ -12,7 +12,10 @@ import java.util.List;
 )
 public class DefectEdition {
     @Id
-    @Column(nullable = false, unique = true, updatable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+
+    @Column(nullable = false)
     private String defectCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,6 +27,14 @@ public class DefectEdition {
             joinColumns = @JoinColumn(name = "defect_code"))
     @Column(name = "batch_number")
     private List<String> affectedBatches = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDefectCode() {
         return defectCode;
