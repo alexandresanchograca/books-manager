@@ -49,32 +49,31 @@ class BookEditionIntegrationTest {
     void shouldCreateAndRetrieveBookEdition() {
         // Given
         BookEditionDTO bookEditionDTO = new BookEditionDTO(
-            "978-3-16-148410-0",
+            "978-3-16-148410-1337",
             "Test Book Title",
             "Test Author",
             1
         );
 
-        // When - Create book edition
         ResponseEntity<BookEditionDTO> createResponse = restTemplate.postForEntity(
                 baseUrl, bookEditionDTO, BookEditionDTO.class);
 
         // Then - Verify creation
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(createResponse.getBody()).isNotNull();
-        assertThat(createResponse.getBody().isbn()).isEqualTo("978-3-16-148410-0");
+        assertThat(createResponse.getBody().isbn()).isEqualTo("978-3-16-148410-1337");
         assertThat(createResponse.getBody().title()).isEqualTo("Test Book Title");
         assertThat(createResponse.getBody().authorName()).isEqualTo("Test Author");
         assertThat(createResponse.getBody().number()).isEqualTo(1);
 
         // When - Retrieve book edition
         ResponseEntity<BookEditionDTO> getResponse = restTemplate.getForEntity(
-                baseUrl + "/978-3-16-148410-0", BookEditionDTO.class);
+                baseUrl + "/978-3-16-148410-1337", BookEditionDTO.class);
 
         // Then - Verify retrieval
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(getResponse.getBody()).isNotNull();
-        assertThat(getResponse.getBody().isbn()).isEqualTo("978-3-16-148410-0");
+        assertThat(getResponse.getBody().isbn()).isEqualTo("978-3-16-148410-1337");
         assertThat(getResponse.getBody().title()).isEqualTo("Test Book Title");
         assertThat(getResponse.getBody().authorName()).isEqualTo("Test Author");
         assertThat(getResponse.getBody().number()).isEqualTo(1);
@@ -164,7 +163,7 @@ class BookEditionIntegrationTest {
     void shouldUpdateBookEditionWithPartialData() {
         // Given
         BookEditionDTO bookEditionDTO = new BookEditionDTO(
-            "978-3-16-148410-0",
+            "978-3-16-148410-1338",
             "Original Book Title",
             "Original Author",
             1
@@ -175,10 +174,10 @@ class BookEditionIntegrationTest {
 
         // Update only title
         UpdateBookEditionDTO partialUpdateDTO = new UpdateBookEditionDTO(
-            "978-3-16-148410-0",
+            "978-3-16-148410-1338",
             "Updated Title Only",
-            null, // authorName is null
-            null  // number is null
+            null,
+            null
         );
 
         // When
@@ -193,7 +192,6 @@ class BookEditionIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().title()).isEqualTo("Updated Title Only");
-        // authorName and number should remain unchanged
         assertThat(response.getBody().authorName()).isEqualTo("Original Author");
         assertThat(response.getBody().number()).isEqualTo(1);
     }
@@ -208,10 +206,8 @@ class BookEditionIntegrationTest {
             1
         );
 
-        // Create book edition
         restTemplate.postForEntity(baseUrl, bookEditionDTO, BookEditionDTO.class);
 
-        // Verify book edition exists
         ResponseEntity<BookEditionDTO> getResponse = restTemplate.getForEntity(
                 baseUrl + "/978-3-16-148410-0", BookEditionDTO.class);
         assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
