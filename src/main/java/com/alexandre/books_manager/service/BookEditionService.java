@@ -17,6 +17,11 @@ public class BookEditionService {
         this.bookEditionRepository = bookEditionRepository;
     }
 
+    @Transactional
+    public BookEdition save(BookEdition bookEdition) {
+        return bookEditionRepository.save(bookEdition);
+    }
+
     @Transactional(readOnly = true)
     public Optional<BookEdition> findByIsbn(String isbn) {
         return bookEditionRepository.findByIsbn(isbn);

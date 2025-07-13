@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(
+        name = "defect_editions",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"defect_code", "edition_isbn"})
+)
 public class DefectEdition {
     @Id
     @Column(nullable = false, unique = true, updatable = false)

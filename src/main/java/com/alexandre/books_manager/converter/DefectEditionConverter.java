@@ -36,8 +36,11 @@ public class DefectEditionConverter {
             return null;
         }
 
+        BookEdition bookEdition = bookEditionConverter.toEntity(defectEditionDto.edition());
+
         DefectEdition defectEdition = new DefectEdition();
         defectEdition.setDefectCode(defectEditionDto.defectCode());
+        defectEdition.setEdition(bookEdition);
         defectEdition.setAffectedBatches(defectEditionDto.affectedBatches());
 
         return defectEdition;
