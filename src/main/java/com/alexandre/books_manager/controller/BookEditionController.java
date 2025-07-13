@@ -40,13 +40,7 @@ public class BookEditionController {
 
     @PostMapping
     public ResponseEntity<BookEditionDTO> saveBookEdition(@RequestBody @Valid BookEditionDTO bookEditionDTO) {
-        Optional<BookEdition> savedBookOptional = bookEditionService.save(bookEditionConverter.toEntity(bookEditionDTO));
-
-        if (savedBookOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        BookEdition savedBookEdition = savedBookOptional.get();
+        BookEdition savedBookEdition = bookEditionService.save(bookEditionConverter.toEntity(bookEditionDTO));
         BookEditionDTO savedBookEditionDTO = bookEditionConverter.toDto(savedBookEdition);
 
         URI location = ServletUriComponentsBuilder
@@ -61,13 +55,9 @@ public class BookEditionController {
     public @ResponseBody ResponseEntity<BookEditionDTO> editBookEdition(
             @RequestBody @Valid BookEditionDTO bookEditionDTO) {
         BookEdition updatedBookEditionEntity = bookEditionConverter.toEntity(bookEditionDTO);
-        Optional<BookEdition> updatedBookEdition = bookEditionService.update(updatedBookEditionEntity);
+        BookEdition updatedBookEdition = bookEditionService.update(updatedBookEditionEntity);
 
-        if (updatedBookEdition.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        BookEditionDTO updatedBookEditionDTO = bookEditionConverter.toDto(updatedBookEdition.get());
+        BookEditionDTO updatedBookEditionDTO = bookEditionConverter.toDto(updatedBookEdition);
         return ResponseEntity.ok(updatedBookEditionDTO);
     }
 }

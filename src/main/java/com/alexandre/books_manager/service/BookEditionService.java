@@ -29,22 +29,22 @@ public class BookEditionService {
     }
 
     @Transactional
-    public Optional<BookEdition> save(BookEdition bookEdition) {
+    public BookEdition save(BookEdition bookEdition) {
         Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(bookEdition.getIsbn());
 
         if (foundBookEdition.isPresent()) {
             throw new BadRequestException("Book Edition already exists");
         }
 
-        return Optional.of(bookEditionRepository.save(bookEdition));
+        return bookEditionRepository.save(bookEdition);
     }
 
     @Transactional
-    public Optional<BookEdition> update(BookEdition bookEdition) {
+    public BookEdition update(BookEdition bookEdition) {
         Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(bookEdition.getIsbn());
 
         if (foundBookEdition.isEmpty()) {
-            return Optional.empty();
+            throw new BadRequestException("Book Edition not found");
         }
 
         BookEdition updatedBookEdition = foundBookEdition.get();
@@ -61,6 +61,6 @@ public class BookEditionService {
             updatedBookEdition.setTitle(bookEdition.getTitle());
         }
 
-        return Optional.of(bookEditionRepository.save(updatedBookEdition));
+        return bookEditionRepository.save(updatedBookEdition);
     }
 }

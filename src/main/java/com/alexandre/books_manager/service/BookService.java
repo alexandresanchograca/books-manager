@@ -1,5 +1,6 @@
 package com.alexandre.books_manager.service;
 
+import com.alexandre.books_manager.exception.BadRequestException;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.repository.BookRepository;
@@ -36,12 +37,12 @@ public class BookService {
     }
 
     @Transactional
-    public Optional<Book> update(Book book) {
+    public Book update(Book book) {
         BookEdition edition = book.getEdition();
         Optional<Book> existingBook = bookRepository.findByBatchNumberAndEditionIsbn(book.getBatchNumber(), edition.getIsbn());
 
         if (existingBook.isEmpty()) {
-            return Optional.empty();
+            throw new BadRequestException("Book not found");
         }
 
         Book updatedBook = existingBook.get();
@@ -54,7 +55,7 @@ public class BookService {
             updatedBook.setPublisher(book.getPublisher());
         }
 
-        return Optional.of(bookRepository.save(updatedBook));
+        return bookRepository.save(updatedBook);
     }
 
     @Transactional

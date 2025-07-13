@@ -52,15 +52,10 @@ public class BookController {
     @PatchMapping
     public @ResponseBody ResponseEntity<BookDTO> editBookByBatchNumberAndIsbn(
             @RequestBody @Valid BookDTO bookDTO) {
-
         Book updatedBookEntity = bookConverter.toEntity(bookDTO);
-        Optional<Book> updatedBook = bookService.update(updatedBookEntity);
+        Book updatedBook = bookService.update(updatedBookEntity);
 
-        if (updatedBook.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        BookDTO updatedBookDTO = bookConverter.toDto(updatedBook.get());
+        BookDTO updatedBookDTO = bookConverter.toDto(updatedBook);
         return ResponseEntity.ok(updatedBookDTO);
     }
 

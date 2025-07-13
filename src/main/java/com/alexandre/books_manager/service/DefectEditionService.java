@@ -1,12 +1,10 @@
 package com.alexandre.books_manager.service;
 
 import com.alexandre.books_manager.exception.BadRequestException;
-import com.alexandre.books_manager.exception.ErrorResponse;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.DefectEdition;
 import com.alexandre.books_manager.repository.BookRepository;
 import com.alexandre.books_manager.repository.DefectEditionRepository;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
