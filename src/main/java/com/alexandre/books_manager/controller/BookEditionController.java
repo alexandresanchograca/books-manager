@@ -1,10 +1,8 @@
 package com.alexandre.books_manager.controller;
 
 import com.alexandre.books_manager.converter.BookEditionConverter;
-import com.alexandre.books_manager.dto.BookDTO;
 import com.alexandre.books_manager.dto.BookEditionDTO;
 import com.alexandre.books_manager.dto.UpdateBookEditionDTO;
-import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.service.BookEditionService;
 import jakarta.validation.Valid;
