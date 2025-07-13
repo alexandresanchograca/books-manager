@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,7 +24,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/v1/book-editions")
+@RequestMapping(path = "/api/v1/book-editions", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Book Edition Management", description = "APIs for managing book editions")
 public class BookEditionController {
 
@@ -44,8 +45,7 @@ public class BookEditionController {
             description = "Retrieve a list of all book editions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book editions retrieved successfully",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = BookEditionDTO.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BookEditionDTO.class)))),
     })
     @GetMapping
     public @ResponseBody ResponseEntity<Iterable<BookEditionDTO>> findAllBookEditions() {
@@ -58,8 +58,7 @@ public class BookEditionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book edition found successfully"),
             @ApiResponse(responseCode = "404", description = "Book edition not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping(path = "/{isbn}")
     public @ResponseBody ResponseEntity<BookEditionDTO> findEdition(
@@ -80,8 +79,7 @@ public class BookEditionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Book edition deleted successfully", content = @Content),
             @ApiResponse(responseCode = "404", description = "Book edition not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<BookEditionDTO> saveBookEdition(@RequestBody @Valid BookEditionDTO bookEditionDTO) {
@@ -101,11 +99,9 @@ public class BookEditionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book edition updated successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Book edition not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PatchMapping
     public @ResponseBody ResponseEntity<BookEditionDTO> editBookEdition(
@@ -120,10 +116,9 @@ public class BookEditionController {
     @Operation(summary = "Delete book edition by ISBN",
             description = "Delete a specific book edition by its ISBN")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Book edition deleted successfully"),
+            @ApiResponse(responseCode = "204", description = "Book edition deleted successfully", content = @Content),
             @ApiResponse(responseCode = "404", description = "Book edition not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping(path = "/{isbn}")
     public @ResponseBody ResponseEntity<BookEditionDTO> deleteBookEdition(

@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/v1/book-defects")
+@RequestMapping(path = "/api/v1/book-defects", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Book Defect Management", description = "APIs for managing book defects")
 public class DefectEditionController {
     private DefectEditionService defectEditionService;
@@ -55,8 +56,7 @@ public class DefectEditionController {
             description = "Retrieve a list of all book defects and quality issues")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Defected Books retrieved successfully",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = DefectEditionDTO.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = DefectEditionDTO.class)))),
     })
     @GetMapping
     public ResponseEntity<List<DefectEditionDTO>> findAll() {
@@ -69,8 +69,7 @@ public class DefectEditionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book defect created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data or book edition not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<DefectEditionDTO> addDefect(@RequestBody @Valid DefectEditionCreateDTO defectEditionDTO) {

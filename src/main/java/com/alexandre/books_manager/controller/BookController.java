@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,7 +25,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api/v1/books")
+@RequestMapping(path = "/api/v1/books", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Book Management", description = "APIs for managing books")
 public class BookController {
 
@@ -46,8 +47,7 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Book created successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PostMapping
     public ResponseEntity<BookDTO> saveBook(@RequestBody @Valid BookDTO bookDTO) {
@@ -66,8 +66,7 @@ public class BookController {
             description = "Retrieve a list of all books with their edition information")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Books retrieved successfully",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = BookDTO.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BookDTO.class)))),
     })
     @GetMapping
     public @ResponseBody ResponseEntity<Iterable<BookDTO>> findAllBook() {
@@ -80,11 +79,9 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book updated successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid request data",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Book not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @PatchMapping
     public @ResponseBody ResponseEntity<BookDTO> updateBookByBatchNumberAndIsbn(
@@ -101,8 +98,7 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Book found successfully"),
             @ApiResponse(responseCode = "404", description = "Book not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @GetMapping(path = "/{batchNumber}/{isbn}")
     public @ResponseBody ResponseEntity<BookDTO> findBookByBatchNumberAndIsbn(
@@ -123,8 +119,7 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Book deleted successfully", content = @Content),
             @ApiResponse(responseCode = "404", description = "Book not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDTO.class)))
     })
     @DeleteMapping(path = "/{batchNumber}/{isbn}")
     public @ResponseBody ResponseEntity<BookDTO> deleteBookByBatchNumberAndIsbn(
