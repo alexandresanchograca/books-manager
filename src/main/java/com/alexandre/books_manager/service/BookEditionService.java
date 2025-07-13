@@ -1,6 +1,7 @@
 package com.alexandre.books_manager.service;
 
 import com.alexandre.books_manager.exception.BadRequestException;
+import com.alexandre.books_manager.exception.NotFoundException;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.repository.BookEditionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class BookEditionService implements GenericService<BookEdition> {
         Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(bookEdition.getIsbn());
 
         if (foundBookEdition.isEmpty()) {
-            throw new BadRequestException("Book Edition not found");
+            throw new NotFoundException("Book Edition not found");
         }
 
         BookEdition updatedBookEdition = foundBookEdition.get();
@@ -70,7 +71,7 @@ public class BookEditionService implements GenericService<BookEdition> {
         Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(isbn);
 
         if (foundBookEdition.isEmpty()) {
-            throw new BadRequestException("Book Edition not found");
+            throw new NotFoundException("Book Edition not found");
         }
 
         bookEditionRepository.deleteByIsbn(isbn);

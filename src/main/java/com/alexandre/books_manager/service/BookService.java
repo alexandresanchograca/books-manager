@@ -1,6 +1,7 @@
 package com.alexandre.books_manager.service;
 
 import com.alexandre.books_manager.exception.BadRequestException;
+import com.alexandre.books_manager.exception.NotFoundException;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.repository.BookRepository;
@@ -42,7 +43,7 @@ public class BookService implements GenericService<Book> {
         Optional<Book> existingBook = bookRepository.findByBatchNumberAndEditionIsbn(book.getBatchNumber(), edition.getIsbn());
 
         if (existingBook.isEmpty()) {
-            throw new BadRequestException("Book not found");
+            throw new NotFoundException("Book not found");
         }
 
         Book updatedBook = existingBook.get();
@@ -84,7 +85,7 @@ public class BookService implements GenericService<Book> {
         Optional<Book> existingBook = bookRepository.findByBatchNumberAndEditionIsbn(batchNumber, editionIsbn);
 
         if (existingBook.isEmpty()) {
-            throw new BadRequestException("Book not found");
+            throw new NotFoundException("Book not found");
         }
 
         bookRepository.deleteByBatchNumberAndEditionIsbn(batchNumber, editionIsbn);

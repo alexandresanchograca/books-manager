@@ -51,6 +51,10 @@ class BookIntegrationTest {
     void setUp() {
         baseUrl = "http://localhost:" + port + "/api/v1/books";
         
+        // Clean up any existing data
+        bookRepository.deleteAll();
+        bookEditionRepository.deleteAll();
+        
         // Create a test BookEdition
         testEdition = new BookEdition();
         testEdition.setIsbn("978-3-16-148410-0");

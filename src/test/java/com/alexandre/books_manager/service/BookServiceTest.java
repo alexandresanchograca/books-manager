@@ -140,6 +140,36 @@ class BookServiceTest {
     }
 
     @Test
+    void shouldPartialUpdateBook() {
+        // Given
+        Book updatedBook = new Book();
+        updatedBook.setId(1L);
+        updatedBook.setPublisher("Updated Publisher");
+        updatedBook.setPublishedYear(2024);
+        updatedBook.setBatchNumber("BATCH001");
+        updatedBook.setEdition(testEdition);
+
+        Book partialBook = new Book();
+        partialBook.setPublisher("Updated Publisher");
+        partialBook.setBatchNumber("BATCH001");
+        partialBook.setEdition(testEdition);
+
+        when(bookRepository.findByBatchNumberAndEditionIsbn("BATCH001", "978-3-16-148410-0"))
+                .thenReturn(Optional.of(testBook));
+        when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
+
+        // When
+        Book result = bookService.update(partialBook);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getPublisher()).isEqualTo("Updated Publisher");
+        assertThat(result.getPublishedYear()).isEqualTo(2024);
+        verify(bookRepository, times(1)).findByBatchNumberAndEditionIsbn("BATCH001", "978-3-16-148410-0");
+        verify(bookRepository, times(1)).save(any(Book.class));
+    }
+
+    @Test
     void shouldThrowExceptionWhenUpdatingNonExistentBook() {
         // Given
         when(bookRepository.findByBatchNumberAndEditionIsbn("BATCH001", "978-3-16-148410-0"))
@@ -183,4 +213,4 @@ class BookServiceTest {
         verify(bookRepository, times(1)).findByBatchNumberAndEditionIsbn("BATCH001", "978-3-16-148410-0");
         verify(bookRepository, never()).deleteByBatchNumberAndEditionIsbn(anyString(), anyString());
     }
-} 
+}

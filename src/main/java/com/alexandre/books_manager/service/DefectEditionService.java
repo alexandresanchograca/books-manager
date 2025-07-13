@@ -1,6 +1,7 @@
 package com.alexandre.books_manager.service;
 
 import com.alexandre.books_manager.exception.BadRequestException;
+import com.alexandre.books_manager.exception.NotFoundException;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.DefectEdition;
 import com.alexandre.books_manager.repository.BookRepository;
@@ -40,7 +41,7 @@ public class DefectEditionService implements GenericService<DefectEdition> {
                     .findByBatchNumberAndEditionIsbn(affectedBatch, currentEditionISBN);
 
             if (foundBook.isEmpty()) {
-                throw new BadRequestException("No book found with batch number: " + affectedBatch + ", and ISBN: " + currentEditionISBN);
+                throw new NotFoundException("No book found with batch number: " + affectedBatch + ", and ISBN: " + currentEditionISBN);
             }
         });
 

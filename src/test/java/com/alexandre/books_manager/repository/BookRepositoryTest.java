@@ -26,13 +26,12 @@ class BookRepositoryTest {
     @Autowired
     private BookEditionRepository bookEditionRepository;
 
-    private BookEdition testEdition;
     private Book testBook;
 
     @BeforeEach
     void setUp() {
         // Create a test BookEdition first
-        testEdition = new BookEdition();
+        BookEdition testEdition = new BookEdition();
         testEdition.setIsbn("978-3-16-148410-0");
         testEdition.setTitle("Test Book Title");
         testEdition.setAuthorName("Test Author");
