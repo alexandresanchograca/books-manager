@@ -1,6 +1,7 @@
 package com.alexandre.books_manager.converter;
 
 import com.alexandre.books_manager.dto.BookDTO;
+import com.alexandre.books_manager.dto.UpdateBookDTO;
 import com.alexandre.books_manager.model.Book;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,20 @@ public class BookConverter {
         book.setPublisher(bookDTO.publisher());
         book.setPublishedYear(bookDTO.publishedYear());
         book.setEdition(bookEditionConverter.toEntity(bookDTO.edition()));
+
+        return book;
+    }
+
+    public Book toEntity(UpdateBookDTO updateBookDTO) {
+        if (updateBookDTO == null) {
+            return null;
+        }
+
+        Book book = new Book();
+        book.setBatchNumber(updateBookDTO.batchNumber());
+        book.setPublisher(updateBookDTO.publisher());
+        book.setPublishedYear(updateBookDTO.publishedYear());
+        book.setEdition(bookEditionConverter.toEntity(updateBookDTO.edition()));
 
         return book;
     }

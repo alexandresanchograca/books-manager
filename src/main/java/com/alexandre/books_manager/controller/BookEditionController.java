@@ -3,6 +3,7 @@ package com.alexandre.books_manager.controller;
 import com.alexandre.books_manager.converter.BookEditionConverter;
 import com.alexandre.books_manager.dto.BookDTO;
 import com.alexandre.books_manager.dto.BookEditionDTO;
+import com.alexandre.books_manager.dto.UpdateBookEditionDTO;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.service.BookEditionService;
@@ -67,7 +68,7 @@ public class BookEditionController {
 
     @PatchMapping
     public @ResponseBody ResponseEntity<BookEditionDTO> editBookEdition(
-            @RequestBody @Valid BookEditionDTO bookEditionDTO) {
+            @RequestBody @Valid UpdateBookEditionDTO bookEditionDTO) {
         BookEdition updatedBookEditionEntity = bookEditionConverter.toEntity(bookEditionDTO);
         BookEdition updatedBookEdition = bookEditionService.update(updatedBookEditionEntity);
 

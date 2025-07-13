@@ -1,6 +1,7 @@
 package com.alexandre.books_manager.converter;
 
 import com.alexandre.books_manager.dto.BookEditionDTO;
+import com.alexandre.books_manager.dto.UpdateBookEditionDTO;
 import com.alexandre.books_manager.model.BookEdition;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +24,6 @@ public class BookEditionConverter {
         );
     }
 
-    /**
-     * Converts an EditionCreateDTO into a new BookEdition entity.
-     *
-     * @param bookEditionDTO The DTO with the creation data.
-     * @return A new BookEdition entity instance.
-     */
     public BookEdition toEntity(BookEditionDTO bookEditionDTO) {
         if (bookEditionDTO == null) {
             return null;
@@ -43,12 +38,20 @@ public class BookEditionConverter {
         return edition;
     }
 
-    /**
-     * Helper method to convert a list of entities to a list of DTOs.
-     *
-     * @param editions The list of entities.
-     * @return A list of DTOs.
-     */
+    public BookEdition toEntity(UpdateBookEditionDTO bookEditionDTO) {
+        if (bookEditionDTO == null) {
+            return null;
+        }
+
+        BookEdition edition = new BookEdition();
+        edition.setTitle(bookEditionDTO.title());
+        edition.setAuthorName(bookEditionDTO.authorName());
+        edition.setIsbn(bookEditionDTO.isbn());
+        edition.setNumber(bookEditionDTO.number());
+
+        return edition;
+    }
+
     public List<BookEditionDTO> toDtoList(Iterable<BookEdition> editions) {
         return StreamSupport.stream(editions.spliterator(), false)
                 .map(this::toDto)
