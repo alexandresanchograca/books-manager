@@ -5,6 +5,7 @@ import com.alexandre.books_manager.dto.BookDTO;
 import com.alexandre.books_manager.dto.UpdateBookDTO;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class BookController {
         this.bookConverter = bookConverter;
     }
 
+    @Operation(summary = "Save Book", description = "Save Book and it's edition")
     @PostMapping
     public ResponseEntity<BookDTO> saveBook(@RequestBody @Valid BookDTO bookDTO) {
         Book book = bookService.save(bookConverter.toEntity(bookDTO));
