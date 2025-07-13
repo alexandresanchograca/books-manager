@@ -1,0 +1,524 @@
+openapi: 3.0.3
+info:
+  title: Books Manager API
+  description: APIs for managing books, book editions, and book defects
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@booksmanager.com
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+  - url: https://api.booksmanager.com
+    description: Production server
+
+tags:
+  - name: Book Management
+    description: APIs for managing books
+  - name: Book Edition Management
+    description: APIs for managing book editions
+  - name: Book Defect Management
+    description: APIs for managing book defects
+
+paths:
+  /api/v1/books:
+    get:
+      tags:
+        - Book Management
+      summary: Get all books
+      description: Retrieve a list of all books with their edition information
+      responses:
+        '200':
+          description: Books retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookDTO'
+        '204':
+          description: No books found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No books found"
+                  timestamp:
+                    type: integer
+                    format: int64
+                    example: 1752437901
+    
+    post:
+      tags:
+        - Book Management
+      summary: Create a new book
+      description: Save a new book with its edition information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDTO'
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    
+    patch:
+      tags:
+        - Book Management
+      summary: Update book information
+      description: Update book information by batch number and ISBN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookDTO'
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  /api/v1/books/{batchNumber}/{isbn}:
+    get:
+      tags:
+        - Book Management
+      summary: Get book by batch number and ISBN
+      description: Retrieve a specific book by its batch number and edition ISBN
+      parameters:
+        - name: batchNumber
+          in: path
+          required: true
+          description: The batch number of the book
+          schema:
+            type: string
+            example: "34-820-4567"
+        - name: isbn
+          in: path
+          required: true
+          description: The ISBN of the book edition
+          schema:
+            type: string
+            example: "1-23-456789-2"
+      responses:
+        '200':
+          description: Book found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDTO'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    
+    delete:
+      tags:
+        - Book Management
+      summary: Delete book by batch number and ISBN
+      description: Delete a specific book by its batch number and edition ISBN
+      parameters:
+        - name: batchNumber
+          in: path
+          required: true
+          description: The batch number of the book
+          schema:
+            type: string
+            example: "34-820-4567"
+        - name: isbn
+          in: path
+          required: true
+          description: The ISBN of the book edition
+          schema:
+            type: string
+            example: "1-23-456789-2"
+      responses:
+        '204':
+          description: Book deleted successfully
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  /api/v1/book-editions:
+    get:
+      tags:
+        - Book Edition Management
+      summary: Get all book editions
+      description: Retrieve a list of all book editions
+      responses:
+        '200':
+          description: Book editions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookEditionDTO'
+        '204':
+          description: No book editions found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No book editions found"
+                  timestamp:
+                    type: integer
+                    format: int64
+                    example: 1752437901
+    
+    post:
+      tags:
+        - Book Edition Management
+      summary: Create a new book edition
+      description: Save a new book edition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookEditionDTO'
+      responses:
+        '201':
+          description: Book edition created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookEditionDTO'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    
+    patch:
+      tags:
+        - Book Edition Management
+      summary: Update book edition information
+      description: Update book edition information by ISBN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookEditionDTO'
+      responses:
+        '200':
+          description: Book edition updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookEditionDTO'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: Book edition not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  /api/v1/book-editions/{isbn}:
+    get:
+      tags:
+        - Book Edition Management
+      summary: Get book edition by ISBN
+      description: Retrieve a specific book edition by its ISBN
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          description: The ISBN of the book edition
+          schema:
+            type: string
+            example: "1-23-456789-2"
+      responses:
+        '200':
+          description: Book edition found successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookEditionDTO'
+        '404':
+          description: Book edition not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    
+    delete:
+      tags:
+        - Book Edition Management
+      summary: Delete book edition by ISBN
+      description: Delete a specific book edition by its ISBN
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          description: The ISBN of the book edition
+          schema:
+            type: string
+            example: "1-23-456789-2"
+      responses:
+        '204':
+          description: Book edition deleted successfully
+        '404':
+          description: Book edition not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  /api/v1/book-defects:
+    get:
+      tags:
+        - Book Defect Management
+      summary: Get all book defects
+      description: Retrieve a list of all book defects and quality issues
+      responses:
+        '200':
+          description: Defected Books retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DefectEditionDTO'
+        '204':
+          description: No book defects found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No book defects found"
+                  timestamp:
+                    type: integer
+                    format: int64
+                    example: 1752437901
+    
+    post:
+      tags:
+        - Book Defect Management
+      summary: Create a new book defect
+      description: Add a new defect record for a specific book edition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefectEditionCreateDTO'
+      responses:
+        '200':
+          description: Book defect created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefectEditionDTO'
+        '400':
+          description: Invalid request data or book edition not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+components:
+  schemas:
+    BookDTO:
+      type: object
+      required:
+        - publisher
+        - publishedYear
+        - batchNumber
+        - edition
+      properties:
+        publisher:
+          type: string
+          description: The publisher of the book
+          example: "Schamberger-Huels"
+        publishedYear:
+          type: integer
+          minimum: 1
+          description: The year the book was published
+          example: 2002
+        batchNumber:
+          type: string
+          description: The batch number of the book
+          example: "34-820-4567"
+        edition:
+          $ref: '#/components/schemas/BookEditionDTO'
+    
+    BookEditionDTO:
+      type: object
+      required:
+        - isbn
+        - title
+        - authorName
+        - number
+      properties:
+        isbn:
+          type: string
+          description: The ISBN of the book edition
+          example: "1-23-456789-2"
+        title:
+          type: string
+          description: The title of the book
+          example: "Java, Beginner's Guide 2"
+        authorName:
+          type: string
+          description: The name of the author
+          example: "Kellsie Havock"
+        number:
+          type: integer
+          minimum: 1
+          description: The edition number
+          example: 2
+    
+    UpdateBookDTO:
+      type: object
+      required:
+        - batchNumber
+        - edition
+      properties:
+        publisher:
+          type: string
+          description: The publisher of the book
+          example: "Schamberger-Huels"
+        publishedYear:
+          type: integer
+          minimum: 1
+          description: The year the book was published
+          example: 2002
+        batchNumber:
+          type: string
+          description: The batch number of the book
+          example: "34-820-4567"
+        edition:
+          $ref: '#/components/schemas/BookEditionDTO'
+    
+    UpdateBookEditionDTO:
+      type: object
+      required:
+        - isbn
+      properties:
+        isbn:
+          type: string
+          description: The ISBN of the book edition
+          example: "1-23-456789-2"
+        title:
+          type: string
+          description: The title of the book
+          example: "Java, Beginner's Guide 2"
+        authorName:
+          type: string
+          description: The name of the author
+          example: "Kellsie Havock"
+        number:
+          type: integer
+          minimum: 1
+          description: The edition number
+          example: 2
+    
+    DefectEditionDTO:
+      type: object
+      required:
+        - edition
+        - defectCode
+        - affectedBatches
+      properties:
+        edition:
+          $ref: '#/components/schemas/BookEditionDTO'
+        defectCode:
+          type: string
+          description: The defect code
+          example: "67038-100"
+        affectedBatches:
+          type: array
+          items:
+            type: string
+          description: List of affected batch numbers
+          example: ["34-820-4567"]
+    
+    DefectEditionCreateDTO:
+      type: object
+      required:
+        - defectCode
+        - editionIsbn
+        - affectedBatches
+      properties:
+        defectCode:
+          type: string
+          description: The defect code
+          example: "67038-100"
+        editionIsbn:
+          type: string
+          description: The ISBN of the book edition
+          example: "1-23-456789-2"
+        affectedBatches:
+          type: array
+          items:
+            type: string
+          description: List of affected batch numbers
+          example: ["34-820-4567"]
+    
+    ErrorResponseDTO:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: "Message Error"
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp when the error occurred
+          example: 1752437901
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
