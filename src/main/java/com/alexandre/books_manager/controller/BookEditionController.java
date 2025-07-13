@@ -1,14 +1,19 @@
 package com.alexandre.books_manager.controller;
 
 import com.alexandre.books_manager.converter.BookEditionConverter;
+import com.alexandre.books_manager.dto.BookDTO;
 import com.alexandre.books_manager.dto.BookEditionDTO;
+import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.service.BookEditionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/book-editions")
@@ -31,5 +36,38 @@ public class BookEditionController {
     public @ResponseBody Iterable<BookEditionDTO> findAllBookEditions() {
         Iterable<BookEdition> bookEditionList = bookEditionService.findAll();
         return bookEditionConverter.toDtoList(bookEditionList);
+    }
+
+    @PostMapping
+    public ResponseEntity<BookEditionDTO> saveBookEdition(@RequestBody @Valid BookEditionDTO bookEditionDTO) {
+        Optional<BookEdition> savedBookOptional = bookEditionService.save(bookEditionConverter.toEntity(bookEditionDTO));
+
+        if (savedBookOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        BookEdition savedBookEdition = savedBookOptional.get();
+        BookEditionDTO savedBookEditionDTO = bookEditionConverter.toDto(savedBookEdition);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(location).body(savedBookEditionDTO);
+    }
+
+    @PatchMapping
+    public @ResponseBody ResponseEntity<BookEditionDTO> editBookEdition(
+            @RequestBody @Valid BookEditionDTO bookEditionDTO) {
+        BookEdition updatedBookEditionEntity = bookEditionConverter.toEntity(bookEditionDTO);
+        Optional<BookEdition> updatedBookEdition = bookEditionService.update(updatedBookEditionEntity);
+
+        if (updatedBookEdition.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        BookEditionDTO updatedBookEditionDTO = bookEditionConverter.toDto(updatedBookEdition.get());
+        return ResponseEntity.ok(updatedBookEditionDTO);
     }
 }

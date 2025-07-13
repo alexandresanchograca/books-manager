@@ -8,6 +8,7 @@ import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.model.DefectEdition;
 import com.alexandre.books_manager.service.BookEditionService;
 import com.alexandre.books_manager.service.DefectEditionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +51,11 @@ public class DefectEditionController {
     }
 
     @PostMapping
-    public ResponseEntity<DefectEditionDTO> addDefect(@RequestBody DefectEditionCreateDTO defectEditionDTO) {
+    public ResponseEntity<DefectEditionDTO> addDefect(@RequestBody @Valid DefectEditionCreateDTO defectEditionDTO) {
         DefectEdition defectEdition = defectEditionCreateConverter.toEntity(defectEditionDTO);
         Optional<BookEdition> relativeEdition = bookEditionService.findByIsbn(defectEditionDTO.editionIsbn());
 
-        if(relativeEdition.isEmpty()) {
+        if (relativeEdition.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 

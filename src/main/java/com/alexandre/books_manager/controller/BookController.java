@@ -4,6 +4,7 @@ import com.alexandre.books_manager.converter.BookConverter;
 import com.alexandre.books_manager.dto.BookDTO;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,35 +31,37 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<BookDTO> saveBook(@RequestBody @Valid BookDTO bookDTO) {
         Book book = bookService.save(bookConverter.toEntity(bookDTO));
         BookDTO savedBookDTO = bookConverter.toDto(book);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .buildAndExpand(savedBookDTO.batchNumber())
+                .build()
                 .toUri();
 
         return ResponseEntity.created(location).body(savedBookDTO);
     }
 
     @GetMapping
-    public @ResponseBody Iterable<BookDTO> findAllBook() {
+    public @ResponseBody ResponseEntity<Iterable<BookDTO>> findAllBook() {
         Iterable<Book> bookList = bookService.findAll();
-        return bookConverter.toDtoList(bookList);
+        return ResponseEntity.ok(bookConverter.toDtoList(bookList));
     }
 
-    @GetMapping(path = "/{id}")
-    public @ResponseBody ResponseEntity<BookDTO> findBookByNumber(@PathVariable Long id) {
-        Optional<Book> bookFound = bookService.findById(id);
+    @PatchMapping
+    public @ResponseBody ResponseEntity<BookDTO> editBookByBatchNumberAndIsbn(
+            @RequestBody @Valid BookDTO bookDTO) {
 
-        if (bookFound.isEmpty()){
+        Book updatedBookEntity = bookConverter.toEntity(bookDTO);
+        Optional<Book> updatedBook = bookService.update(updatedBookEntity);
+
+        if (updatedBook.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        BookDTO bookDTO = bookConverter.toDto(bookFound.get());
-
-        return ResponseEntity.ok(bookDTO);
+        BookDTO updatedBookDTO = bookConverter.toDto(updatedBook.get());
+        return ResponseEntity.ok(updatedBookDTO);
     }
 
     @GetMapping(path = "/{batchNumber}/{isbn}")

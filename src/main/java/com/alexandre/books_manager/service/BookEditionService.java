@@ -1,5 +1,6 @@
 package com.alexandre.books_manager.service;
 
+import com.alexandre.books_manager.exception.BadRequestException;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.repository.BookEditionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,6 @@ public class BookEditionService {
         this.bookEditionRepository = bookEditionRepository;
     }
 
-    @Transactional
-    public BookEdition save(BookEdition bookEdition) {
-        return bookEditionRepository.save(bookEdition);
-    }
-
     @Transactional(readOnly = true)
     public Optional<BookEdition> findByIsbn(String isbn) {
         return bookEditionRepository.findByIsbn(isbn);
@@ -30,5 +26,41 @@ public class BookEditionService {
     @Transactional(readOnly = true)
     public Iterable<BookEdition> findAll() {
         return bookEditionRepository.findAll();
+    }
+
+    @Transactional
+    public Optional<BookEdition> save(BookEdition bookEdition) {
+        Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(bookEdition.getIsbn());
+
+        if (foundBookEdition.isPresent()) {
+            throw new BadRequestException("Book Edition already exists");
+        }
+
+        return Optional.of(bookEditionRepository.save(bookEdition));
+    }
+
+    @Transactional
+    public Optional<BookEdition> update(BookEdition bookEdition) {
+        Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(bookEdition.getIsbn());
+
+        if (foundBookEdition.isEmpty()) {
+            return Optional.empty();
+        }
+
+        BookEdition updatedBookEdition = foundBookEdition.get();
+
+        if (bookEdition.getAuthorName() != null) {
+            updatedBookEdition.setAuthorName(bookEdition.getAuthorName());
+        }
+
+        if (bookEdition.getNumber() != null) {
+            updatedBookEdition.setNumber(bookEdition.getNumber());
+        }
+
+        if (bookEdition.getTitle() != null) {
+            updatedBookEdition.setTitle(bookEdition.getTitle());
+        }
+
+        return Optional.of(bookEditionRepository.save(updatedBookEdition));
     }
 }

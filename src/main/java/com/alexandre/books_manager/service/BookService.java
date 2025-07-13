@@ -36,6 +36,28 @@ public class BookService {
     }
 
     @Transactional
+    public Optional<Book> update(Book book) {
+        BookEdition edition = book.getEdition();
+        Optional<Book> existingBook = bookRepository.findByBatchNumberAndEditionIsbn(book.getBatchNumber(), edition.getIsbn());
+
+        if (existingBook.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Book updatedBook = existingBook.get();
+
+        if (book.getPublishedYear() != null) {
+            updatedBook.setPublishedYear(book.getPublishedYear());
+        }
+
+        if(book.getPublisher() != null) {
+            updatedBook.setPublisher(book.getPublisher());
+        }
+
+        return Optional.of(bookRepository.save(updatedBook));
+    }
+
+    @Transactional
     public Book save(Book book) {
         BookEdition edition = book.getEdition();
 

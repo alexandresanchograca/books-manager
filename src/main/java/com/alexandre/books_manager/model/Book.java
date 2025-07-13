@@ -17,11 +17,11 @@ public class Book {
 
     private Integer publishedYear;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String batchNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "edition_isbn", nullable = false)
+    @JoinColumn(name = "edition_isbn", nullable = false, updatable = false)
     private BookEdition edition;
 
     public Long getId() {
