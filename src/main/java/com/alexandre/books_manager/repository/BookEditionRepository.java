@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BookEditionRepository extends CrudRepository<BookEdition, String> {
     Optional<BookEdition> findByIsbn(String isbn);
+    void deleteByIsbn(String isbn);
 }

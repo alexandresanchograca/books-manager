@@ -72,4 +72,12 @@ public class BookController {
         BookDTO bookDTO = bookConverter.toDto(bookFound.get());
         return ResponseEntity.ok(bookDTO);
     }
+
+    @DeleteMapping(path = "/{batchNumber}/{isbn}")
+    public @ResponseBody ResponseEntity<BookDTO> deleteBookByBatchNumberAndIsbn(
+            @PathVariable String batchNumber,
+            @PathVariable String isbn) {
+        bookService.delete(batchNumber, isbn);
+        return ResponseEntity.noContent().build();
+    }
 }

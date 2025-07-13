@@ -63,4 +63,16 @@ public class BookEditionService {
 
         return bookEditionRepository.save(updatedBookEdition);
     }
+
+
+    @Transactional
+    public void deleteByIsbn(String isbn) {
+        Optional<BookEdition> foundBookEdition = bookEditionRepository.findByIsbn(isbn);
+
+        if (foundBookEdition.isEmpty()) {
+            throw new BadRequestException("Book Edition not found");
+        }
+
+        bookEditionRepository.deleteByIsbn(isbn);
+    }
 }

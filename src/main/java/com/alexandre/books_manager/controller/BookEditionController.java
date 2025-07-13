@@ -33,9 +33,23 @@ public class BookEditionController {
     }
 
     @GetMapping
-    public @ResponseBody Iterable<BookEditionDTO> findAllBookEditions() {
+    public @ResponseBody ResponseEntity<Iterable<BookEditionDTO>> findAllBookEditions() {
         Iterable<BookEdition> bookEditionList = bookEditionService.findAll();
-        return bookEditionConverter.toDtoList(bookEditionList);
+        return ResponseEntity.ok(bookEditionConverter.toDtoList(bookEditionList));
+    }
+
+    @GetMapping(path = "/{isbn}")
+    public @ResponseBody ResponseEntity<BookEditionDTO> findEdition(
+            @PathVariable String isbn
+    ) {
+        Optional<BookEdition> bookEdition = bookEditionService.findByIsbn(isbn);
+
+        if (bookEdition.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        BookEditionDTO bookEditionDTO = bookEditionConverter.toDto(bookEdition.get());
+        return ResponseEntity.ok(bookEditionDTO);
     }
 
     @PostMapping
@@ -59,5 +73,13 @@ public class BookEditionController {
 
         BookEditionDTO updatedBookEditionDTO = bookEditionConverter.toDto(updatedBookEdition);
         return ResponseEntity.ok(updatedBookEditionDTO);
+    }
+
+    @DeleteMapping(path = "/{isbn}")
+    public @ResponseBody ResponseEntity<BookEditionDTO> deleteBookEdition(
+            @PathVariable String isbn
+    ) {
+        bookEditionService.deleteByIsbn(isbn);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -78,4 +78,15 @@ public class BookService {
     public Iterable<Book> findAll() {
         return bookRepository.findAll();
     }
+
+    @Transactional
+    public void delete(String batchNumber, String editionIsbn) {
+        Optional<Book> existingBook = bookRepository.findByBatchNumberAndEditionIsbn(batchNumber, editionIsbn);
+
+        if (existingBook.isEmpty()) {
+            throw new BadRequestException("Book not found");
+        }
+
+        bookRepository.deleteByBatchNumberAndEditionIsbn(batchNumber, editionIsbn);
+    }
 }
