@@ -4,12 +4,8 @@ import com.alexandre.books_manager.dto.DefectEditionCreateDTO;
 import com.alexandre.books_manager.model.DefectEdition;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Component
-public class DefectEditionCreateConverter {
+public class DefectEditionCreateConverter implements GenericConverter<DefectEdition, DefectEditionCreateDTO> {
     public DefectEditionCreateDTO toDto(DefectEdition defectEdition) {
         if (defectEdition == null || defectEdition.getEdition() == null) {
             return null;
@@ -32,11 +28,5 @@ public class DefectEditionCreateConverter {
         defectEdition.setAffectedBatches(defectEditionDto.affectedBatches());
 
         return defectEdition;
-    }
-
-    public List<DefectEditionCreateDTO> toDtoList(Iterable<DefectEdition> defectEditions) {
-        return StreamSupport.stream(defectEditions.spliterator(), false)
-                .map(this::toDto)
-                .collect(Collectors.toList());
     }
 }

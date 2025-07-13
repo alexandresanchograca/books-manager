@@ -5,12 +5,8 @@ import com.alexandre.books_manager.dto.UpdateBookEditionDTO;
 import com.alexandre.books_manager.model.BookEdition;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Component
-public class BookEditionConverter {
+public class BookEditionConverter implements GenericConverter<BookEdition, BookEditionDTO> {
     public BookEditionDTO toDto(BookEdition edition) {
         if (edition == null) {
             return null;
@@ -50,11 +46,5 @@ public class BookEditionConverter {
         edition.setNumber(bookEditionDTO.number());
 
         return edition;
-    }
-
-    public List<BookEditionDTO> toDtoList(Iterable<BookEdition> editions) {
-        return StreamSupport.stream(editions.spliterator(), false)
-                .map(this::toDto)
-                .collect(Collectors.toList());
     }
 }

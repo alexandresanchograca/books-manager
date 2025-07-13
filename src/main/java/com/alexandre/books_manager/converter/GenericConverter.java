@@ -4,6 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * A generic converter to be used as a base for concrete converter implementations
@@ -11,18 +12,20 @@ import java.util.stream.Collectors;
  * @param <S> the source type
  * @param <T> the target type
  */
-public abstract class AbstractConverter<S, T> implements Converter<S, T> {
+public interface GenericConverter<S, T> {
+    T toDto(S object);
+
+    S toEntity(T object);
 
     /**
-     * Converts the source list of type S to target type T
+     * Converts the source iterables of type S to target type T
      *
-     * @param listToConvert the list to convert
+     * @param iterable the iterable to convert
      * @return the list of converted elements
      */
-    public List<T> convert(List<S> listToConvert) {
-
-        return listToConvert.stream()
-                .map(this::convert)
+    default List<T> toDtoList(Iterable<S> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false)
+                .map(this::toDto)
                 .collect(Collectors.toList());
     }
 }

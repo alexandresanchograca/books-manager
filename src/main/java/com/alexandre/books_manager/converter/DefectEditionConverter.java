@@ -5,12 +5,8 @@ import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.model.DefectEdition;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Component
-public class DefectEditionConverter {
+public class DefectEditionConverter implements GenericConverter<DefectEdition, DefectEditionDTO> {
     private final BookEditionConverter bookEditionConverter;
 
     public DefectEditionConverter(BookEditionConverter bookEditionConverter) {
@@ -44,11 +40,5 @@ public class DefectEditionConverter {
         defectEdition.setAffectedBatches(defectEditionDto.affectedBatches());
 
         return defectEdition;
-    }
-
-    public List<DefectEditionDTO> toDtoList(Iterable<DefectEdition> defectEditions) {
-        return StreamSupport.stream(defectEditions.spliterator(), false)
-                .map(this::toDto)
-                .collect(Collectors.toList());
     }
 }

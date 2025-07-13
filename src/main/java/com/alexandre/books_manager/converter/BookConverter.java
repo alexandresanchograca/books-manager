@@ -5,12 +5,8 @@ import com.alexandre.books_manager.dto.UpdateBookDTO;
 import com.alexandre.books_manager.model.Book;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 @Component
-public class BookConverter {
+public class BookConverter implements GenericConverter<Book, BookDTO> {
 
     private final BookEditionConverter bookEditionConverter;
 
@@ -57,17 +53,5 @@ public class BookConverter {
         book.setEdition(bookEditionConverter.toEntity(updateBookDTO.edition()));
 
         return book;
-    }
-
-    /**
-     * Helper method to convert a list of entities to a list of DTOs.
-     *
-     * @param bookBatches The list of entities.
-     * @return A list of DTOs.
-     */
-    public List<BookDTO> toDtoList(Iterable<Book> bookBatches) {
-        return StreamSupport.stream(bookBatches.spliterator(), false)
-                .map(this::toDto)
-                .collect(Collectors.toList());
     }
 }
