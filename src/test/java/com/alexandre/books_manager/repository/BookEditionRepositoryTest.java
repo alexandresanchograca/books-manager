@@ -3,6 +3,7 @@ package com.alexandre.books_manager.repository;
 import com.alexandre.books_manager.model.Book;
 import com.alexandre.books_manager.model.BookEdition;
 import com.alexandre.books_manager.service.BookService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,17 +23,22 @@ class BookEditionRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
+    public BookEdition createTestBookEdition() {
+        BookEdition edition = new BookEdition();
+        edition.setIsbn("978-3-16-148410-0");
+        edition.setTitle("Test Book Title");
+        edition.setAuthorName("Test Author");
+        edition.setNumber(1);
+        return edition;
+    }
+
     @Test
     void shouldSaveBookEdition() {
         // Given
-        BookEdition bookEdition = new BookEdition();
-        bookEdition.setIsbn("978-3-16-148410-0");
-        bookEdition.setTitle("Test Book Title");
-        bookEdition.setAuthorName("Test Author");
-        bookEdition.setNumber(1);
+        BookEdition testEdition = createTestBookEdition();
 
         // When
-        BookEdition savedEdition = bookEditionRepository.save(bookEdition);
+        BookEdition savedEdition = bookEditionRepository.save(testEdition);
 
         // Then
         assertThat(savedEdition.getIsbn()).isEqualTo("978-3-16-148410-0");
@@ -44,11 +50,7 @@ class BookEditionRepositoryTest {
     @Test
     void shouldFindBookEditionByIsbn() {
         // Given
-        BookEdition bookEdition = new BookEdition();
-        bookEdition.setIsbn("978-3-16-148410-0");
-        bookEdition.setTitle("Test Book Title");
-        bookEdition.setAuthorName("Test Author");
-        bookEdition.setNumber(1);
+        BookEdition bookEdition = createTestBookEdition();
         bookEditionRepository.save(bookEdition);
 
         // When
@@ -74,11 +76,7 @@ class BookEditionRepositoryTest {
     @Test
     void shouldFindAllBookEditions() {
         // Given
-        BookEdition firstEdition = new BookEdition();
-        firstEdition.setIsbn("978-3-16-148410-0");
-        firstEdition.setTitle("First Book Title");
-        firstEdition.setAuthorName("First Author");
-        firstEdition.setNumber(1);
+        BookEdition firstEdition = createTestBookEdition();
         bookEditionRepository.save(firstEdition);
 
         BookEdition secondEdition = new BookEdition();
@@ -98,11 +96,7 @@ class BookEditionRepositoryTest {
     @Test
     void shouldDeleteBookEditionByIsbn() {
         // Given
-        BookEdition bookEdition = new BookEdition();
-        bookEdition.setIsbn("978-3-16-148410-0");
-        bookEdition.setTitle("Test Book Title");
-        bookEdition.setAuthorName("Test Author");
-        bookEdition.setNumber(1);
+        BookEdition bookEdition = createTestBookEdition();
         bookEditionRepository.save(bookEdition);
 
         // When
